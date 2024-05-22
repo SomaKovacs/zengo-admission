@@ -9,6 +9,9 @@ RUN apt update && apt install -y \
 RUN apt clean && rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
+ENV MYSQL_ENCODING UTF-8
+ENV MYSQL_CHARACTER_SET UTF8
+
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
