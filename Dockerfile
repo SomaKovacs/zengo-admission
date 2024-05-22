@@ -7,7 +7,15 @@ RUN apt update && apt install -y \
     libonig-dev \
     libxml2-dev
 RUN apt clean && rm -rf /var/lib/apt/lists/*
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd \
+    && apt-get update && apt-get install -y --no-install-recommends nodejs npm
+
+WORKDIR /usr/src/app
+COPY package.json package-lock.json ./
+
+RUN npm install
+COPY . ./
+RUN npm run build
 
 ENV MYSQL_ENCODING UTF-8
 ENV MYSQL_CHARACTER_SET UTF8
