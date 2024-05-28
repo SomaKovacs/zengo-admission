@@ -3,14 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\County;
-use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class CountyController extends Controller
 {
-    public function __invoke(): View
+    public function __invoke(): JsonResponse
     {
-        $counties = County::all();
-
-        return view('main', ['counties' => $counties]);
+        return response()->json(County::orderBy('name')->get());
     }
 }
