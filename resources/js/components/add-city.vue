@@ -3,22 +3,23 @@
 import { defineEmits, ref} from "vue";
 import axios from "axios";
 
-defineProps<{
-    countyId?: number
-}>();
+const props = defineProps({
+    countyId: Number
+})
 
 const name = ref('');
 const emit = defineEmits(['addCityToList']);
 
-const addCityToCounty = (name: string, countyId: number) =>
+const addCityToCounty = () =>
 {
     const data = new FormData();
-    data.append("name", name);
-    data.append("county_id", countyId);
+    data.append("name", name.value);
+    data.append("county_id", props.countyId);
 
     axios.post("/addCityToCounty", data)
         .then((response) => {
             emit('addCityToList', response.data);
+            name.value = '';
         })
         .catch((error) => {
             console.error(error);
@@ -33,7 +34,7 @@ const addCityToCounty = (name: string, countyId: number) =>
 
     <div class="add-div">
         <input id="name" type="text" v-model="name" required="required"/>
-        <button @click="addCityToCounty(name, countyId)">Felvétel</button>
+        <button @click="addCityToCounty">Felvétel</button>
     </div>
 </div>
 </template>
